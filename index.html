@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTLED–ICT Mock LET Reviewer • 300 Questions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .question-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar { transition: transform 0.3s ease; }
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+        }
+        .option { transition: all 0.2s; }
+    </style>
+</head>
+<body class="bg-zinc-100 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 min-h-screen">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- Mobile Top Bar -->
+        <div class="md:hidden fixed top-0 left-0 right-0 h-16 bg-white dark:bg-zinc-900 border-b z-50 flex items-center px-4 justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-violet-600 text-white rounded-2xl flex items-center justify-center text-2xl font-bold">L</div>
+                <h1 class="font-bold text-lg">ICT LET Reviewer</h1>
+            </div>
+            <button onclick="toggleMobileMenu()" class="text-3xl w-12 h-12 flex items-center justify-center">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar md:w-72 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 flex flex-col fixed md:static inset-y-0 left-0 z-50 w-72 md:translate-x-0">
+            <div class="md:p-6 p-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center gap-3">
+                <div class="w-10 h-10 bg-violet-600 text-white rounded-2xl flex items-center justify-center text-2xl font-bold">L</div>
+                <div class="hidden md:block">
+                    <h1 class="text-2xl font-bold tracking-tight">ICT LET Reviewer</h1>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400">300 Questions • 6 Components</p>
+                </div>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-4 pt-20 md:pt-4">
+                <div class="space-y-1">
+                    <button onclick="selectComponent(1)" class="component-btn w-full text-left px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors active-component" id="comp-1">
+                        <span class="text-lg font-semibold text-violet-600">01</span><span class="font-medium">Computer Fundamentals</span>
+                    </button>
+                    <button onclick="selectComponent(2)" class="component-btn w-full text-left px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" id="comp-2">
+                        <span class="text-lg font-semibold text-violet-600">02</span><span class="font-medium">ICT in Education</span>
+                    </button>
+                    <button onclick="selectComponent(3)" class="component-btn w-full text-left px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" id="comp-3">
+                        <span class="text-lg font-semibold text-violet-600">03</span><span class="font-medium">Networking</span>
+                    </button>
+                    <button onclick="selectComponent(4)" class="component-btn w-full text-left px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" id="comp-4">
+                        <span class="text-lg font-semibold text-violet-600">04</span><span class="font-medium">Programming Basics</span>
+                    </button>
+                    <button onclick="selectComponent(5)" class="component-btn w-full text-left px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" id="comp-5">
+                        <span class="text-lg font-semibold text-violet-600">05</span><span class="font-medium">Digital Literacy & Cyber Ethics</span>
+                    </button>
+                    <button onclick="selectComponent(6)" class="component-btn w-full text-left px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" id="comp-6">
+                        <span class="text-lg font-semibold text-violet-600">06</span><span class="font-medium">Educational Technology Integration</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-4 border-t border-zinc-200 dark:border-zinc-800">
+                <div onclick="showHistory()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer">
+                    <i class="fa-solid fa-clock-rotate-left text-xl text-amber-500"></i>
+                    <div><p class="font-medium text-sm">Score History</p></div>
+                </div>
+                <button onclick="toggleDarkMode()" class="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl hover:bg-zinc-100 dark:hover:bg-zinc-800 text-sm font-medium">
+                    <i class="fa-solid fa-moon"></i><span id="theme-text">Dark Mode</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Top Bar -->
+            <div class="h-16 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 px-8 hidden md:flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <h2 id="component-title" class="text-2xl font-semibold">Component 1: Computer Fundamentals</h2>
+                    <span id="component-subtitle" class="text-sm px-3 py-1 bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 rounded-full">50 Questions</span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <button onclick="startReviewMode()" class="flex items-center gap-2 text-sm font-medium hover:text-violet-600 transition-colors">
+                        <i class="fa-solid fa-book-open"></i><span>Full Review</span>
+                    </button>
+                    <button onclick="startQuiz()" class="bg-violet-600 hover:bg-violet-700 text-white px-6 py-2.5 rounded-2xl font-semibold flex items-center gap-2 transition-all active:scale-95">
+                        <i class="fa-solid fa-play"></i><span>Start Quiz</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="flex-1 overflow-auto p-8 pt-20 md:pt-8" id="main-content">
+
+                <!-- Home Screen -->
+                <div id="home-screen" class="max-w-2xl mx-auto text-center py-20">
+                    <div class="mb-8">
+                        <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white rounded-3xl text-6xl mb-6">📘</div>
+                    </div>
+                    <h1 class="text-5xl font-bold tracking-tighter mb-4">Welcome to your<br>ICT LET Mock Exam</h1>
+                    <p class="text-xl text-zinc-600 dark:text-zinc-400 mb-12">300 high-quality questions with detailed rationalizations.<br>Perfect preparation for the LET.</p>
+                </div>
+
+                <!-- Quiz Screen -->
+                <div id="quiz-screen" class="hidden max-w-3xl mx-auto">
+                    <div class="flex justify-between items-center mb-8">
+                        <div class="text-sm text-zinc-500">Question <span id="current-q-num" class="font-mono font-bold text-2xl text-violet-600">1</span>/50</div>
+                        <div class="flex items-center gap-4">
+                            <div id="timer" class="font-mono text-lg font-semibold text-rose-500">90:00</div>
+                            <button onclick="endQuizEarly()" class="text-xs px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-2xl hover:bg-red-50 dark:hover:bg-red-950">End Quiz</button>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-zinc-900 rounded-3xl p-10 shadow-xl question-card" id="question-card">
+                        <p id="question-text" class="text-xl leading-relaxed font-medium mb-10"></p>
+                        <div id="options-container" class="space-y-3"></div>
+                    </div>
+                    <div class="flex justify-between mt-8">
+                        <button onclick="prevQuestion()" id="prev-btn" class="flex items-center gap-2 px-6 py-3 rounded-2xl border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 disabled:opacity-50">
+                            <i class="fa-solid fa-arrow-left"></i><span>Previous</span>
+                        </button>
+                        <button onclick="nextQuestion()" id="next-btn" class="flex items-center gap-2 px-8 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-2xl font-semibold">
+                            <span id="next-text">Next</span><i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Screen -->
+                <div id="results-screen" class="hidden max-w-4xl mx-auto">
+                    <div class="text-center mb-10">
+                        <div id="score-circle" class="mx-auto w-48 h-48 rounded-full border-8 border-emerald-500 flex items-center justify-center text-7xl font-bold mb-6">92</div>
+                        <h2 id="results-title" class="text-4xl font-bold">Excellent!</h2>
+                        <p id="results-subtitle" class="text-zinc-500 dark:text-zinc-400">Component 1 • 46/50 correct</p>
+                    </div>
+                    <div class="bg-white dark:bg-zinc-900 rounded-3xl p-8">
+                        <h3 class="font-semibold mb-6 flex items-center gap-2"><i class="fa-solid fa-list-check"></i> Detailed Review</h3>
+                        <div id="review-list" class="space-y-6 max-h-[500px] overflow-auto pr-4"></div>
+                    </div>
+                    <div class="flex gap-4 justify-center mt-10 flex-wrap">
+                        <button onclick="saveScoreToDB()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-3xl font-semibold flex items-center gap-3">
+                            <i class="fa-solid fa-floppy-disk"></i> Save to My Database
+                        </button>
+                        <button onclick="restartSameComponent()" class="px-8 py-4 rounded-3xl border border-zinc-300 dark:border-zinc-700 font-medium">Retake Component</button>
+                        <button onclick="backToHome()" class="px-8 py-4 rounded-3xl border border-zinc-300 dark:border-zinc-700 font-medium">Back to Menu</button>
+                    </div>
+                </div>
+
+                <!-- Full Review Mode -->
+                <div id="full-review-screen" class="hidden max-w-4xl mx-auto">
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="text-3xl font-semibold">All Questions & Rationalizations</h2>
+                        <input id="search-input" onkeyup="filterReview()" placeholder="Search questions..." class="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-3xl px-6 py-3 w-80 focus:outline-none focus:border-violet-500">
+                    </div>
+                    <div id="full-review-list" class="space-y-8"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Overlay -->
+    <div onclick="toggleMobileMenu()" id="mobile-overlay" class="hidden md:hidden fixed inset-0 bg-black/50 z-40"></div>
+
+    <!-- History Modal -->
+    <div id="history-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-zinc-900 rounded-3xl max-w-lg w-full mx-4 max-h-[90vh] overflow-hidden">
+            <div class="p-6 border-b dark:border-zinc-700 flex items-center justify-between">
+                <h3 class="font-semibold text-lg">Your Score History</h3>
+                <button onclick="hideHistory()" class="text-2xl leading-none">&times;</button>
+            </div>
+            <div id="history-list" class="p-6 max-h-[60vh] overflow-auto space-y-4"></div>
+            <div class="p-6 border-t dark:border-zinc-700 flex justify-end">
+                <button onclick="hideHistory()" class="px-6 py-3 font-medium">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== ALL 300 QUESTIONS ====================
+        const allQuestions = [
+            // Component 1 - Computer Fundamentals (1-50)
+            {component:1,number:1,question:"Which component is primarily responsible for executing program instructions?",options:["A. RAM","B. Hard Drive","C. CPU","D. Motherboard"],answer:"C",rationale:"The CPU (Central Processing Unit) executes program instructions through its control unit and arithmetic logic unit. RAM stores data temporarily, while storage devices keep data permanently."},
+            {component:1,number:2,question:"Which of the following is a volatile memory?",options:["A. SSD","B. ROM","C. RAM","D. Flash Drive"],answer:"C",rationale:"RAM is volatile memory because it loses its contents when power is turned off. ROM and storage devices retain data even without power."},
+            {component:1,number:3,question:"The primary function of the operating system is to:",options:["A. Design applications","B. Manage hardware and software resources","C. Replace antivirus software","D. Increase internet speed"],answer:"B",rationale:"The operating system manages hardware resources, processes, memory, and user interfaces. It acts as an intermediary between hardware and application software."},
+            {component:1,number:4,question:"Which of the following is an example of system software?",options:["A. Microsoft Word","B. Google Chrome","C. Linux","D. Adobe Photoshop"],answer:"C",rationale:"Linux is an operating system, which is classified as system software. The others are application software."},
+            {component:1,number:5,question:"Which device converts digital signals to analog signals for transmission over telephone lines?",options:["A. Router","B. Switch","C. Modem","D. Repeater"],answer:"C",rationale:"A modem (modulator-demodulator) converts digital signals into analog signals and vice versa for communication over traditional telephone lines."},                {component:1,number:6,question:"The binary number system uses which base?",options:["A. 2","B. 8","C. 10","D. 16"],answer:"A",rationale:"Binary is a base-2 number system that uses only two digits: 0 and 1. Computers operate internally using binary."},
+            {component:1,number:7,question:"Which storage device has no moving mechanical parts?",options:["A. HDD","B. SSD","C. CD-ROM","D. DVD"],answer:"B",rationale:"Solid State Drives (SSD) use flash memory and contain no moving parts, making them faster and more durable than HDDs."},
+            {component:1,number:8,question:"The ALU is responsible for:",options:["A. Storing files","B. Performing arithmetic and logic operations","C. Connecting peripherals","D. Booting the system"],answer:"B",rationale:"The Arithmetic Logic Unit performs mathematical calculations and logical comparisons within the CPU."},
+            {component:1,number:9,question:"Which of the following is an input device?",options:["A. Printer","B. Monitor","C. Scanner","D. Speaker"],answer:"C",rationale:"A scanner captures physical documents and converts them into digital form, making it an input device."},
+            {component:1,number:10,question:"A terabyte is equal to approximately:",options:["A. 1,000 bytes","B. 1 million bytes","C. 1 billion bytes","D. 1 trillion bytes"],answer:"D",rationale:"A terabyte is approximately one trillion bytes (1,000 gigabytes in decimal measurement)."},                {component:1,number:11,question:"Which of the following BEST describes firmware?",options:["A. Temporary files","B. Software embedded in hardware","C. Web applications","D. Spreadsheet programs"],answer:"B",rationale:"Firmware is software programmed into hardware devices, such as BIOS or embedded systems."},
+            {component:1,number:12,question:"The BIOS is stored in:",options:["A. RAM","B. ROM","C. SSD","D. Cache"],answer:"B",rationale:"BIOS is stored in ROM because it must remain available even when the system is powered off."},
+            {component:1,number:13,question:"Which component connects all hardware parts of a computer?",options:["A. CPU","B. Motherboard","C. GPU","D. Power supply"],answer:"B",rationale:"The motherboard is the main circuit board that connects and allows communication among all components."},
+            {component:1,number:14,question:"Cache memory is used to:",options:["A. Store permanent files","B. Speed up data access","C. Replace RAM","D. Install applications"],answer:"B",rationale:"Cache memory stores frequently accessed data to speed up processing by reducing access time."},
+            {component:1,number:15,question:"Which of the following is NOT an example of output device?",options:["A. Plotter","B. Headphones","C. Projector","D. Keyboard"],answer:"D",rationale:"A keyboard is an input device used to enter data into a computer."},                {component:1,number:16,question:"A bit represents:",options:["A. Eight binary digits","B. A single binary digit","C. A group of bytes","D. A decimal value"],answer:"B",rationale:"A bit is the smallest unit of data and represents either 0 or 1."},
+            {component:1,number:17,question:"Which memory is closest to the CPU?",options:["A. RAM","B. SSD","C. Cache","D. HDD"],answer:"C",rationale:"Cache memory is located inside or very close to the CPU, allowing faster data access."},
+            {component:1,number:18,question:"Which of the following is an example of open-source software?",options:["A. Windows","B. macOS","C. Linux","D. MS Excel"],answer:"C",rationale:"Linux is open-source, meaning its source code is publicly accessible and modifiable."},
+            {component:1,number:19,question:"The booting process refers to:",options:["A. Installing software","B. Starting up the computer","C. Formatting the disk","D. Deleting viruses"],answer:"B",rationale:"Booting is the process of starting a computer and loading the operating system into memory."},
+            {component:1,number:20,question:"A peripheral device is:",options:["A. Part of the CPU","B. External device connected to a computer","C. Type of RAM","D. Storage partition"],answer:"B",rationale:"Peripheral devices are external hardware components such as printers, keyboards, and external drives."},                {component:1,number:21,question:"The GPU is primarily responsible for:",options:["A. Managing system memory","B. Controlling input devices","C. Rendering graphics and video output","D. Storing permanent files"],answer:"C",rationale:"The Graphics Processing Unit (GPU) handles image rendering, video processing, and graphical computations. It improves performance in multimedia, gaming, and graphic design applications."},
+            {component:1,number:22,question:"Which of the following is classified as secondary storage?",options:["A. Cache memory","B. RAM","C. CPU register","D. Hard Disk Drive"],answer:"D",rationale:"Secondary storage refers to non-volatile storage that retains data permanently, such as HDDs and SSDs. RAM and cache are volatile memory types."},
+            {component:1,number:23,question:"ASCII is primarily used for:",options:["A. Encrypting files","B. Character encoding","C. Compressing images","D. Network routing"],answer:"B",rationale:"ASCII (American Standard Code for Information Interchange) assigns numeric values to letters, numbers, and symbols to represent text in computers."},
+            {component:1,number:24,question:"Which of the following is NOT a function of an operating system?",options:["A. Managing processes","B. Controlling memory allocation","C. Providing user interface","D. Manufacturing hardware components"],answer:"D",rationale:"An operating system manages hardware and software resources but does not physically manufacture hardware components."},
+            {component:1,number:25,question:"USB stands for:",options:["A. Universal Serial Bus","B. Unified System Board","C. User Service Backup","D. Universal Storage Block"],answer:"A",rationale:"USB (Universal Serial Bus) is a standard interface used to connect peripheral devices to computers."},                {component:1,number:26,question:"Cloud storage is BEST described as:",options:["A. External hard drive storage","B. Physical server room storage","C. Online storage accessible via the internet","D. Temporary cache storage"],answer:"C",rationale:"Cloud storage allows users to store and access data remotely over the internet instead of using local physical storage devices."},
+            {component:1,number:27,question:"A computer virus is:",options:["A. A hardware malfunction","B. A malicious software program","C. A type of antivirus tool","D. A network protocol"],answer:"B",rationale:"A virus is a form of malware that replicates itself and spreads to other systems, often causing damage or data corruption."},
+            {component:1,number:28,question:"CPU speed is measured in:",options:["A. Hertz","B. Bytes","C. Pixels","D. Watts"],answer:"A",rationale:"CPU speed is measured in Hertz (Hz), which represents cycles per second. Modern CPUs operate in gigahertz (GHz)."},                {component:1,number:29,question:"Which device is responsible for routing data between different networks?",options:["A. Switch","B. Hub","C. Router","D. Repeater"],answer:"C",rationale:"A router directs data packets between different networks, such as between a local network and the internet."},
+            {component:1,number:30,question:"Which of the following is an example of utility software?",options:["A. Microsoft Excel","B. Google Docs","C. PowerPoint","D. Antivirus software"],answer:"D",rationale:"Utility software helps maintain, analyze, and optimize computer performance. Antivirus programs are designed to detect and remove malware."},
+            {component:1,number:31,question:"The hexadecimal number system uses:",options:["A. Base 2","B. Base 8","C. Base 10","D. Base 16"],answer:"D",rationale:"The hexadecimal system uses 16 symbols (0–9 and A–F) and is commonly used in computing for memory addressing and color codes."},                {component:1,number:32,question:"Which of the following is NOT a storage device?",options:["A. SSD","B. ALU","C. Flash Drive","D. HDD"],answer:"B",rationale:"The ALU (Arithmetic Logic Unit) performs calculations inside the CPU and is not a storage device."},
+            {component:1,number:33,question:"GUI stands for:",options:["A. General Utility Interface","B. Global User Internet","C. Graphical User Interface","D. Guided User Interaction"],answer:"C",rationale:"A GUI allows users to interact with a computer using visual elements such as icons, windows, and menus."},
+            {component:1,number:34,question:"Which of the following memory types is non-volatile?",options:["A. ROM","B. RAM","C. Cache","D. Register"],answer:"A",rationale:"ROM (Read-Only Memory) retains its data even when the power is turned off."},
+            {component:1,number:35,question:"Which file extension indicates an executable file in Windows?",options:["A. .docx","B. .exe","C. .jpg","D. .mp3"],answer:"B",rationale:"The .exe extension identifies executable programs that can be run in the Windows operating system."},
+            {component:1,number:36,question:"Which of the following is both an input and output device?",options:["A. Printer","B. Scanner","C. Touchscreen","D. Speaker"],answer:"C",rationale:"A touchscreen displays output while also accepting touch input from users."},
+            {component:1,number:37,question:"Formatting a disk will:",options:["A. Erase all stored data","B. Increase RAM capacity","C. Install the operating system automatically","D. Repair hardware damage"],answer:"A",rationale:"Formatting prepares a storage device for use by erasing all existing data and setting up a file system."},
+            {component:1,number:38,question:"All of the following are examples of malware EXCEPT:",options:["A. Trojan","B. Worm","C. Spyware","D. Firewall"],answer:"D",rationale:"A firewall is a security tool that protects systems from unauthorized access, while the others are types of malicious software."},
+            {component:1,number:39,question:"Bit rate directly affects:",options:["A. Monitor resolution","B. Storage capacity","C. Data transmission speed","D. CPU temperature"],answer:"C",rationale:"Bit rate refers to the number of bits transmitted per second and determines data transfer speed in networks."},
+            {component:1,number:40,question:"Which practice BEST protects data from permanent loss?",options:["A. Defragmentation","B. Regular data backup","C. Disk formatting","D. Installing more RAM"],answer:"B",rationale:"Regular backups ensure that data can be restored in case of hardware failure, accidental deletion, or cyberattacks."},
+            {component:1,number:41,question:"Which component supplies electrical power to the computer?",options:["A. Motherboard","B. CPU","C. GPU","D. Power Supply Unit"],answer:"D",rationale:"The PSU converts electrical power from an outlet into usable power for computer components."},
+            {component:1,number:42,question:"Which of the following is an example of optical storage?",options:["A. SSD","B. DVD","C. RAM","D. Cache"],answer:"B",rationale:"DVDs store data using laser technology, making them optical storage devices."},
+            {component:1,number:43,question:"Increasing RAM capacity primarily improves:",options:["A. Multitasking performance","B. Screen brightness","C. Internet subscription speed","D. Printer quality"],answer:"A",rationale:"More RAM allows the system to handle multiple applications simultaneously without slowing down."},
+            {component:1,number:44,question:"Overclocking a CPU increases its:",options:["A. Storage space","B. Power supply","C. Operating speed","D. Physical size"],answer:"C",rationale:"Overclocking increases the CPU’s clock rate beyond manufacturer specifications to enhance performance."},
+            {component:1,number:45,question:"Which operating system is proprietary?",options:["A. Linux","B. Windows","C. Ubuntu","D. Fedora"],answer:"B",rationale:"Windows is proprietary software owned and controlled by Microsoft, unlike open-source systems like Linux and Ubuntu."},
+            {component:1,number:46,question:"During startup, BIOS primarily loads:",options:["A. Application software","B. Antivirus program","C. Printer driver","D. Operating system"],answer:"D",rationale:"BIOS initializes hardware and loads the operating system into memory during booting."},
+            {component:1,number:47,question:"Cache memory is designed to:",options:["A. Temporarily store frequently accessed data","B. Permanently archive files","C. Replace secondary storage","D. Increase monitor resolution"],answer:"A",rationale:"Cache stores frequently used instructions and data to reduce access time and improve CPU efficiency."},
+            {component:1,number:48,question:"LAN stands for:",options:["A. Large Access Network","B. Long Area Node","C. Local Area Network","D. Logical Application Network"],answer:"C",rationale:"A Local Area Network connects computers within a limited geographic area such as a classroom or office."},
+            {component:1,number:49,question:"Which device helps prevent CPU overheating?",options:["A. Router","B. Heat sink","C. Modem","D. Keyboard"],answer:"B",rationale:"A heat sink dissipates heat generated by the CPU to prevent overheating and maintain stable performance."},
+            {component:1,number:50,question:"The MOST appropriate reason for upgrading from HDD to SSD is:",options:["A. Increased monitor resolution","B. Larger keyboard size","C. Faster data access and boot time","D. Improved speaker quality"],answer:"C",rationale:"SSDs provide significantly faster read/write speeds compared to HDDs, improving system boot time and application performance."},
+
+            
+            // Component 2: ICT IN EDUCATION (50 items)
+            {component:2,number:1,question:"ICT integration in education is BEST defined as:",options:["A. Using computers during class breaks","B. Replacing teachers with technology","C. Meaningful use of technology to enhance learning outcomes","D. Allowing students to browse freely online"],answer:"C",rationale:"ICT integration involves purposeful and strategic use of technology to improve instruction, engagement, and learning outcomes—not merely using devices for convenience."},
+            {component:2,number:2,question:"A teacher uses PowerPoint only to display lecture notes word-for-word. This reflects:",options:["A. Transformative integration","B. Substitution level of integration","C. Redefinition level","D. Collaborative learning"],answer:"B",rationale:"In the SAMR model, substitution occurs when technology replaces traditional tools without functional improvement, such as replacing a chalkboard with slides."},
+            {component:2,number:3,question:"Which model describes levels of technology integration: Substitution, Augmentation, Modification, Redefinition?",options:["A. TPACK","B. Bloom’s Taxonomy","C. SAMR","D. ADDIE"],answer:"C",rationale:"The SAMR model classifies technology integration into four levels, from simple substitution to transformative redefinition."},
+            {component:2,number:4,question:"TPACK emphasizes the integration of:",options:["A. Technology only","B. Pedagogy only","C. Content knowledge only","D. Technology, pedagogy, and content knowledge"],answer:"D",rationale:"TPACK highlights the intersection of technological knowledge, pedagogical knowledge, and content knowledge for effective teaching."},
+            {component:2,number:5,question:"Which is the MOST appropriate use of ICT for formative assessment?",options:["A. Posting grades online only","B. Using online quizzes with instant feedback","C. Printing test papers","D. Displaying scores at the end of the semester"],answer:"B",rationale:"Formative assessment focuses on monitoring learning progress. Online quizzes with instant feedback help students identify gaps immediately."},
+            {component:2,number:6,question:"A teacher allows students to create digital storytelling projects instead of written essays. This demonstrates:",options:["A. Passive learning","B. Teacher-centered instruction","C. Creative and multimodal learning","D. Elimination of assessment"],answer:"C",rationale:"Digital storytelling integrates multimedia elements and promotes creativity, communication, and higher-order thinking."},
+            {component:2,number:7,question:"Which is an example of synchronous online learning?",options:["A. Pre-recorded lecture video","B. Discussion forum post","C. Live Zoom class","D. Email assignment submission"],answer:"C",rationale:"Synchronous learning occurs in real time, such as live virtual classes or webinars."},
+            {component:2,number:8,question:"Which of the following is asynchronous learning?",options:["A. Live webinar","B. Recorded video lecture","C. Video conference","D. Real-time chat discussion"],answer:"B",rationale:"Asynchronous learning does not require real-time interaction, allowing students to access materials at their convenience."},
+            {component:2,number:9,question:"In ICT-based instruction, digital divide refers to:",options:["A. Internet speed differences only","B. Students preferring gadgets","C. Gap in access to technology resources","D. Difference between teachers and students"],answer:"C",rationale:"The digital divide refers to unequal access to digital tools, internet connectivity, and technological literacy."},
+            {component:2,number:10,question:"Which practice BEST promotes digital collaboration?",options:["A. Individual online worksheets","B. Shared Google Docs editing","C. Printed group report","D. Teacher-only presentations"],answer:"B",rationale:"Shared digital platforms enable real-time collaboration, communication, and teamwork."},
+            {component:2,number:11,question:"An LMS is primarily used to:",options:["A. Replace textbooks permanently","B. Manage, deliver, and track learning activities","C. Eliminate face-to-face teaching","D. Prevent plagiarism only"],answer:"B",rationale:"A Learning Management System organizes course materials, assessments, tracking, and communication."},
+            {component:2,number:12,question:"Which is NOT a benefit of ICT in education?",options:["A. Increased learner engagement","B. Flexible access to materials","C. Guaranteed academic honesty","D. Access to global resources"],answer:"C",rationale:"ICT cannot guarantee academic honesty; in fact, it may increase opportunities for plagiarism if not managed properly."},
+            {component:2,number:13,question:"Blended learning combines:",options:["A. Online and face-to-face instruction","B. Two textbooks","C. Printed and handwritten notes","D. Teacher and parent instruction only"],answer:"A",rationale:"Blended learning integrates online digital media with traditional classroom methods."},
+            {component:2,number:14,question:"Which strategy BEST ensures responsible ICT use in class?",options:["A. Blocking all websites","B. Ignoring misuse","C. Teaching digital citizenship","D. Removing all gadgets"],answer:"C",rationale:"Teaching digital citizenship empowers students to use technology ethically and responsibly."},
+            {component:2,number:15,question:"A teacher designing instruction using ADDIE begins with:",options:["A. Evaluation","B. Analysis","C. Development","D. Implementation"],answer:"B",rationale:"ADDIE begins with Analysis, where learner needs and instructional goals are identified."},
+            {component:2,number:16,question:"Which ICT tool supports interactive polling in class?",options:["A. Mentimeter","B. Paint","C. Notepad","D. BIOS"],answer:"A",rationale:"Mentimeter allows real-time polling and student engagement."},
+            {component:2,number:17,question:"Which level of Bloom’s is MOST enhanced by ICT simulations?",options:["A. Remembering","B. Understanding","C. Applying","D. Creating"],answer:"C",rationale:"Simulations allow learners to apply knowledge in realistic scenarios."},
+            {component:2,number:18,question:"The use of multimedia in teaching primarily supports:",options:["A. Single learning modality","B. Multiple sensory engagement","C. Pure memorization","D. Teacher-centered delivery"],answer:"B",rationale:"Multimedia integrates text, audio, video, and graphics, engaging multiple senses and supporting diverse learning styles."},
+            {component:2,number:19,question:"Which is an example of synchronous online learning?",options:["A. Pre-recorded lecture video","B. Discussion forum post","C. Live Zoom class","D. Email assignment submission"],answer:"C",rationale:"Synchronous learning occurs in real time, such as live virtual classes or webinars."},
+            {component:2,number:20,question:"Which of the following is asynchronous learning?",options:["A. Live webinar","B. Recorded video lecture","C. Video conference","D. Real-time chat discussion"],answer:"B",rationale:"Asynchronous learning does not require real-time interaction, allowing students to access materials at their convenience."},
+            {component:2,number:21,question:"In ICT-based instruction, digital divide refers to:",options:["A. Internet speed differences only","B. Students preferring gadgets","C. Gap in access to technology resources","D. Difference between teachers and students"],answer:"C",rationale:"The digital divide refers to unequal access to digital tools, internet connectivity, and technological literacy."},
+            {component:2,number:22,question:"Which practice BEST promotes digital collaboration?",options:["A. Individual online worksheets","B. Shared Google Docs editing","C. Printed group report","D. Teacher-only presentations"],answer:"B",rationale:"Shared digital platforms enable real-time collaboration, communication, and teamwork."},
+            {component:2,number:23,question:"An LMS is primarily used to:",options:["A. Replace textbooks permanently","B. Manage, deliver, and track learning activities","C. Eliminate face-to-face teaching","D. Prevent plagiarism only"],answer:"B",rationale:"A Learning Management System organizes course materials, assessments, tracking, and communication."},
+            {component:2,number:24,question:"Which is NOT a benefit of ICT in education?",options:["A. Increased learner engagement","B. Flexible access to materials","C. Guaranteed academic honesty","D. Access to global resources"],answer:"C",rationale:"ICT cannot guarantee academic honesty; in fact, it may increase opportunities for plagiarism if not managed properly."},
+            {component:2,number:25,question:"Blended learning combines:",options:["A. Online and face-to-face instruction","B. Two textbooks","C. Printed and handwritten notes","D. Teacher and parent instruction only"],answer:"A",rationale:"Blended learning integrates online digital media with traditional classroom methods."},
+            {component:2,number:26,question:"Which strategy BEST ensures responsible ICT use in class?",options:["A. Blocking all websites","B. Ignoring misuse","C. Teaching digital citizenship","D. Removing all gadgets"],answer:"C",rationale:"Teaching digital citizenship empowers students to use technology ethically and responsibly."},
+            {component:2,number:27,question:"A teacher designing instruction using ADDIE begins with:",options:["A. Evaluation","B. Analysis","C. Development","D. Implementation"],answer:"B",rationale:"ADDIE begins with Analysis, where learner needs and instructional goals are identified."},
+            {component:2,number:28,question:"Which ICT tool supports interactive polling in class?",options:["A. Mentimeter","B. Paint","C. Notepad","D. BIOS"],answer:"A",rationale:"Mentimeter allows real-time polling and student engagement."},
+            {component:2,number:29,question:"Which level of Bloom’s is MOST enhanced by ICT simulations?",options:["A. Remembering","B. Understanding","C. Applying","D. Creating"],answer:"C",rationale:"Simulations allow learners to apply knowledge in realistic scenarios."},
+            {component:2,number:30,question:"The use of multimedia in teaching primarily supports:",options:["A. Single learning modality","B. Multiple sensory engagement","C. Pure memorization","D. Teacher-centered delivery"],answer:"B",rationale:"Multimedia integrates text, audio, video, and graphics, engaging multiple senses and supporting diverse learning styles."},
+            {component:2,number:31,question:"Which is an example of synchronous online learning?",options:["A. Pre-recorded lecture video","B. Discussion forum post","C. Live Zoom class","D. Email assignment submission"],answer:"C",rationale:"Synchronous learning occurs in real time, such as live virtual classes or webinars."},
+            {component:2,number:32,question:"Which of the following is asynchronous learning?",options:["A. Live webinar","B. Recorded video lecture","C. Video conference","D. Real-time chat discussion"],answer:"B",rationale:"Asynchronous learning does not require real-time interaction, allowing students to access materials at their convenience."},
+            {component:2,number:33,question:"In ICT-based instruction, digital divide refers to:",options:["A. Internet speed differences only","B. Students preferring gadgets","C. Gap in access to technology resources","D. Difference between teachers and students"],answer:"C",rationale:"The digital divide refers to unequal access to digital tools, internet connectivity, and technological literacy."},
+            {component:2,number:34,question:"Which practice BEST promotes digital collaboration?",options:["A. Individual online worksheets","B. Shared Google Docs editing","C. Printed group report","D. Teacher-only presentations"],answer:"B",rationale:"Shared digital platforms enable real-time collaboration, communication, and teamwork."},
+            {component:2,number:35,question:"An LMS is primarily used to:",options:["A. Replace textbooks permanently","B. Manage, deliver, and track learning activities","C. Eliminate face-to-face teaching","D. Prevent plagiarism only"],answer:"B",rationale:"A Learning Management System organizes course materials, assessments, tracking, and communication."},
+            {component:2,number:36,question:"Which is NOT a benefit of ICT in education?",options:["A. Increased learner engagement","B. Flexible access to materials","C. Guaranteed academic honesty","D. Access to global resources"],answer:"C",rationale:"ICT cannot guarantee academic honesty; in fact, it may increase opportunities for plagiarism if not managed properly."},
+            {component:2,number:37,question:"Blended learning combines:",options:["A. Online and face-to-face instruction","B. Two textbooks","C. Printed and handwritten notes","D. Teacher and parent instruction only"],answer:"A",rationale:"Blended learning integrates online digital media with traditional classroom methods."},
+            {component:2,number:38,question:"Which strategy BEST ensures responsible ICT use in class?",options:["A. Blocking all websites","B. Ignoring misuse","C. Teaching digital citizenship","D. Removing all gadgets"],answer:"C",rationale:"Teaching digital citizenship empowers students to use technology ethically and responsibly."},
+            {component:2,number:39,question:"A teacher designing instruction using ADDIE begins with:",options:["A. Evaluation","B. Analysis","C. Development","D. Implementation"],answer:"B",rationale:"ADDIE begins with Analysis, where learner needs and instructional goals are identified."},
+            {component:2,number:40,question:"Which ICT tool supports interactive polling in class?",options:["A. Mentimeter","B. Paint","C. Notepad","D. BIOS"],answer:"A",rationale:"Mentimeter allows real-time polling and student engagement."},
+            {component:2,number:41,question:"Which level of Bloom’s is MOST enhanced by ICT simulations?",options:["A. Remembering","B. Understanding","C. Applying","D. Creating"],answer:"C",rationale:"Simulations allow learners to apply knowledge in realistic scenarios."},
+            {component:2,number:42,question:"The use of multimedia in teaching primarily supports:",options:["A. Single learning modality","B. Multiple sensory engagement","C. Pure memorization","D. Teacher-centered delivery"],answer:"B",rationale:"Multimedia integrates text, audio, video, and graphics, engaging multiple senses and supporting diverse learning styles."},
+            {component:2,number:43,question:"Which is an example of synchronous online learning?",options:["A. Pre-recorded lecture video","B. Discussion forum post","C. Live Zoom class","D. Email assignment submission"],answer:"C",rationale:"Synchronous learning occurs in real time, such as live virtual classes or webinars."},
+            {component:2,number:44,question:"Which of the following is asynchronous learning?",options:["A. Live webinar","B. Recorded video lecture","C. Video conference","D. Real-time chat discussion"],answer:"B",rationale:"Asynchronous learning does not require real-time interaction, allowing students to access materials at their convenience."},
+            {component:2,number:45,question:"In ICT-based instruction, digital divide refers to:",options:["A. Internet speed differences only","B. Students preferring gadgets","C. Gap in access to technology resources","D. Difference between teachers and students"],answer:"C",rationale:"The digital divide refers to unequal access to digital tools, internet connectivity, and technological literacy."},
+            {component:2,number:46,question:"Which practice BEST promotes digital collaboration?",options:["A. Individual online worksheets","B. Shared Google Docs editing","C. Printed group report","D. Teacher-only presentations"],answer:"B",rationale:"Shared digital platforms enable real-time collaboration, communication, and teamwork."},
+            {component:2,number:47,question:"An LMS is primarily used to:",options:["A. Replace textbooks permanently","B. Manage, deliver, and track learning activities","C. Eliminate face-to-face teaching","D. Prevent plagiarism only"],answer:"B",rationale:"A Learning Management System organizes course materials, assessments, tracking, and communication."},
+            {component:2,number:48,question:"Which is NOT a benefit of ICT in education?",options:["A. Increased learner engagement","B. Flexible access to materials","C. Guaranteed academic honesty","D. Access to global resources"],answer:"C",rationale:"ICT cannot guarantee academic honesty; in fact, it may increase opportunities for plagiarism if not managed properly."},
+            {component:2,number:49,question:"Blended learning combines:",options:["A. Online and face-to-face instruction","B. Two textbooks","C. Printed and handwritten notes","D. Teacher and parent instruction only"],answer:"A",rationale:"Blended learning integrates online digital media with traditional classroom methods."},
+            {component:2,number:50,question:"Which strategy BEST ensures responsible ICT use in class?",options:["A. Blocking all websites","B. Ignoring misuse","C. Teaching digital citizenship","D. Removing all gadgets"],answer:"C",rationale:"Teaching digital citizenship empowers students to use technology ethically and responsibly."},
+
+// Component 3: NETWORKING (items present in your document)
+            {component:3,number:1,question:"Which device is responsible for routing data between different networks?",options:["A. Switch","B. Hub","C. Router","D. Repeater"],answer:"C",rationale:"A router directs data packets between different networks, such as between a local network and the internet."},
+            {component:3,number:2,question:"LAN stands for:",options:["A. Large Access Network","B. Long Area Node","C. Local Area Network","D. Logical Application Network"],answer:"C",rationale:"A Local Area Network connects computers within a limited geographic area such as a classroom or office."},
+
+//component 4 dito part//
+
+// Component 5: DIGITAL LITERACY & CYBER ETHICS (50 items)
+            {component:5,number:1,question:"Digital literacy primarily refers to:",options:["A. Using gadgets only","B. The ability to find, evaluate, and communicate information using digital technologies","C. Playing online games","D. Posting on social media"],answer:"B",rationale:"Digital literacy involves the skills to effectively and responsibly use digital tools and platforms to access, evaluate, create, and communicate information."},
+            {component:5,number:2,question:"Which of the following is an example of digital etiquette?",options:["A. Sharing passwords with friends","B. Using polite language in online communication","C. Posting personal photos without consent","D. Spamming group chats"],answer:"B",rationale:"Digital etiquette (netiquette) involves using respectful and appropriate behavior when communicating online."},
+            {component:5,number:3,question:"What does 'plagiarism' mean in the digital context?",options:["A. Copying and pasting text without citation","B. Creating original content","C. Sharing public domain materials","D. Using Creative Commons licensed work"],answer:"A",rationale:"Digital plagiarism occurs when someone copies online content (text, images, code) without proper attribution or permission."},
+            {component:5,number:4,question:"Which practice BEST protects personal information online?",options:["A. Sharing full birthdate on social media","B. Using strong, unique passwords","C. Clicking unknown links","D. Saving passwords in plain text"],answer:"B",rationale:"Strong, unique passwords combined with two-factor authentication are key to protecting personal accounts."},
+            {component:5,number:5,question:"What is 'phishing'?",options:["A. A secure login method","B. Fraudulent attempt to obtain sensitive information by pretending to be trustworthy","C. A type of social media post","D. A programming language"],answer:"B",rationale:"Phishing uses deceptive emails, messages, or websites to trick users into revealing passwords, credit card numbers, or other sensitive data."},
+            {component:5,number:6,question:"Which of the following is a strong password practice?",options:["A. Using '123456'","B. Reusing the same password everywhere","C. Combining uppercase, lowercase, numbers, and symbols","D. Using your name and birth year"],answer:"C",rationale:"Strong passwords are long, complex, and unique, using a mix of character types."},
+            {component:5,number:7,question:"What should you do if you receive an email asking for your bank details?",options:["A. Reply immediately","B. Click the link provided","C. Verify by contacting the bank directly","D. Forward to friends"],answer:"C",rationale:"Never respond to unsolicited requests for financial information; always verify through official channels."},
+            {component:5,number:8,question:"Which is an example of cyberbullying?",options:["A. Sending encouraging messages","B. Repeatedly posting hurtful comments online","C. Sharing study notes","D. Asking for homework help"],answer:"B",rationale:"Cyberbullying involves using digital platforms to harass, threaten, or humiliate someone repeatedly."},
+            {component:5,number:9,question:"What does HTTPS indicate about a website?",options:["A. It is unsafe","B. It uses encryption for secure communication","C. It is free","D. It has fast loading speed"],answer:"B",rationale:"HTTPS (Hypertext Transfer Protocol Secure) encrypts data between your browser and the website, protecting it from interception."},
+            {component:5,number:10,question:"Which of the following is a form of malware?",options:["A. Firewall","B. Antivirus","C. Trojan horse","D. VPN"],answer:"C",rationale:"A Trojan horse is malware disguised as legitimate software that can steal data or damage systems."},
+            {component:5,number:11,question:"What is the best way to verify information found online?",options:["A. Trust the first result","B. Check multiple reputable sources","C. Share immediately","D. Believe viral posts"],answer:"B",rationale:"Cross-checking with credible, multiple sources helps identify misinformation or fake news."},
+            {component:5,number:12,question:"Which privacy setting should you enable on social media?",options:["A. Public profile","B. Private/friends-only posts","C. Share location always","D. Allow tagging without approval"],answer:"B",rationale:"Private or friends-only settings limit who can see your content and reduce exposure."},
+            {component:5,number:13,question:"What is 'two-factor authentication' (2FA)?",options:["A. Using two passwords","B. Adding a second verification step (e.g., code sent to phone)","C. Logging in twice","D. Sharing account with someone"],answer:"B",rationale:"2FA adds an extra layer of security beyond just a password."},
+            {component:5,number:14,question:"Which is a sign of a fake social media account?",options:["A. Verified badge","B. Very few followers but many posts","C. Mutual friends","D. Profile photo of a real person"],answer:"B",rationale:"Fake accounts often have low followers but high activity or generic content."},
+            {component:5,number:15,question:"What should you avoid clicking in an email from an unknown sender?",options:["A. The sender's name","B. Suspicious links or attachments","C. The subject line","D. The date"],answer:"B",rationale:"Links and attachments in unknown emails can install malware or lead to phishing sites."},
+            {component:5,number:16,question:"Which law protects personal data in the Philippines?",options:["A. Data Privacy Act of 2012","B. Cybercrime Prevention Act","C. Freedom of Information Act","D. E-Commerce Act"],answer:"A",rationale:"Republic Act No. 10173 (Data Privacy Act) protects individuals' personal information."},
+            {component:5,number:17,question:"What is 'catfishing'?",options:["A. Fishing online","B. Creating a fake online identity to deceive someone","C. Sharing cat photos","D. Online shopping"],answer:"B",rationale:"Catfishing involves pretending to be someone else online, often for romance scams or harassment."},
+            {component:5,number:18,question:"Which is a safe way to share files online?",options:["A. Public Google Drive link","B. Encrypted file-sharing service","C. Email attachment to unknown person","D. USB drive in public"],answer:"B",rationale:"Encrypted services protect files during transfer and storage."},
+            {component:5,number:19,question:"What does 'copyright' protect?",options:["A. Ideas","B. Original works of authorship (text, images, music)","C. Product names","D. General knowledge"],answer:"B",rationale:"Copyright protects creative expressions like writing, art, music, and software."},
+            {component:5,number:20,question:"Which is an example of digital footprint?",options:["A. Offline conversations","B. Posts, likes, and search history online","C. Paper documents","D. Phone calls"],answer:"B",rationale:"Your digital footprint is the trail of data you leave behind when using the internet."},
+            {component:5,number:21,question:"What is the main goal of media literacy?",options:["A. Consume more content","B. Critically analyze and evaluate media messages","C. Share everything","D. Avoid all media"],answer:"B",rationale:"Media literacy helps people understand, evaluate, and create media messages responsibly."},
+            {component:5,number:22,question:"Which button should you use when you see harmful content online?",options:["A. Like","B. Report","C. Share","D. Comment"],answer:"B",rationale:"Reporting harmful content helps platforms remove it and protect users."},
+            {component:5,number:23,question:"What is a 'strong password' characteristic?",options:["A. Short and simple","B. At least 12 characters with variety","C. Your name + birth year","D. Same as all accounts"],answer:"B",rationale:"Strong passwords are long, complex, and unique for each account."},
+            {component:5,number:24,question:"Which is a common online scam?",options:["A. Bank notifying unusual activity","B. 'You won a prize' messages asking for fees","C. Official government email","D. Friend request from known person"],answer:"B",rationale:"Prize scams often ask for payment to claim winnings that don't exist."},
+            {component:5,number:25,question:"What does VPN stand for and what does it do?",options:["A. Virtual Private Network - hides your IP and encrypts traffic","B. Video Player Network - plays videos","C. Virtual Public Network - shares public Wi-Fi","D. Voice Phone Network - calls online"],answer:"A",rationale:"VPNs encrypt your internet connection and mask your IP for privacy and security."},
+            {component:5,number:26,question:"Which is NOT a good digital citizenship practice?",options:["A. Respect others online","B. Cyberbullying anonymously","C. Cite sources","D. Protect privacy"],answer:"B",rationale:"Cyberbullying violates digital citizenship principles of respect and responsibility."},
+            {component:5,number:27,question:"What should you do before posting a photo of someone else?",options:["A. Post immediately","B. Ask for their permission","C. Tag without asking","D. Blur the face"],answer:"B",rationale:"Always get consent before posting photos of others to respect privacy."},
+            {component:5,number:28,question:"Which is a form of identity theft?",options:["A. Using your own account","B. Someone using your personal info without permission","C. Changing password","D. Logging out"],answer:"B",rationale:"Identity theft occurs when someone uses your personal information fraudulently."},
+            {component:5,number:29,question:"What is 'fair use' in copyright?",options:["A. Unlimited copying","B. Limited use for education, criticism, or commentary","C. Commercial use without permission","D. Selling copies"],answer:"B",rationale:"Fair use allows limited use of copyrighted material without permission for specific purposes."},
+            {component:5,number:30,question:"Which is a red flag of a phishing email?",options:["A. From known sender","B. Urgent request for login or payment","C. Official logo","D. Correct grammar"],answer:"B",rationale:"Phishing emails often create urgency or fear to trick you into clicking or replying quickly."},
+            {component:5,number:31,question:"What is the purpose of antivirus software?",options:["A. Speed up internet","B. Detect and remove malware","C. Create passwords","D. Backup files"],answer:"B",rationale:"Antivirus software scans for, detects, and removes malicious programs."},
+            {component:5,number:32,question:"Which practice reduces risk on public Wi-Fi?",options:["A. Banking online","B. Using VPN","C. Clicking ads","D. Saving passwords"],answer:"B",rationale:"VPN encrypts traffic on public networks, protecting data from interception."},
+            {component:5,number:33,question:"What does 'CC' in Creative Commons mean?",options:["A. Closed Content","B. Copyright Control","C. Creative Commons - allows sharing with conditions","D. Copy Content"],answer:"C",rationale:"Creative Commons licenses allow creators to share work with specific permissions."},
+            {component:5,number:34,question:"Which is a responsible way to handle online disagreements?",options:["A. Use all caps insults","B. Discuss calmly or disengage","C. Share private messages","D. Report for no reason"],answer:"B",rationale:"Responsible digital citizens communicate respectfully or step away from toxic interactions."},
+            {component:5,number:35,question:"What is 'doxing'?",options:["A. Sharing public info","B. Publishing private personal information without consent","C. Deleting posts","D. Following someone"],answer:"B",rationale:"Doxing involves revealing private information (address, phone) online to harm or harass."},
+            {component:5,number:36,question:"Which should you never share online?",options:["A. Favorite color","B. Full home address and phone number","C. School name","D. Birthday month"],answer:"B",rationale:"Sensitive personal details like full address increase risk of identity theft or stalking."},
+            {component:5,number:37,question:"What is the benefit of clearing browser cookies regularly?",options:["A. Faster internet","B. Improves privacy by removing tracking data","C. Saves passwords","D. Blocks ads completely"],answer:"B",rationale:"Clearing cookies removes tracking data that websites use to profile your behavior."},
+            {component:5,number:38,question:"Which is an example of good password hygiene?",options:["A. Writing passwords on paper","B. Using a password manager","C. Sharing with family","D. Using 'password123'"],answer:"B",rationale:"Password managers securely store and generate strong, unique passwords."},
+            {component:5,number:39,question:"What should you do if your account is hacked?",options:["A. Ignore it","B. Change passwords immediately and enable 2FA","C. Post about it publicly","D. Use the account normally"],answer:"B",rationale:"Quickly secure the account and notify the service provider."},
+            {component:5,number:40,question:"Which law in the Philippines addresses cybercrime?",options:["A. RA 10175 - Cybercrime Prevention Act","B. RA 10173 - Data Privacy Act","C. Both A and B","D. None"],answer:"C",rationale:"RA 10175 addresses cybercrimes; RA 10173 protects personal data privacy."},
+            {component:5,number:41,question:"What is 'social engineering'?",options:["A. Building social media profiles","B. Manipulating people to divulge confidential information","C. Creating online communities","D. Teaching online safety"],answer:"B",rationale:"Social engineering tricks people into revealing sensitive information or performing actions."},
+            {component:5,number:42,question:"Which is safer: HTTP or HTTPS?",options:["A. HTTP","B. HTTPS","C. Both same","D. Depends on browser"],answer:"B",rationale:"HTTPS encrypts data, making it safer than unencrypted HTTP."},
+            {component:5,number:43,question:"What is 'clickbait'?",options:["A. Useful links","B. Sensational headlines designed to attract clicks","C. Secure downloads","D. Educational content"],answer:"B",rationale:"Clickbait uses exaggerated or misleading titles to drive traffic, often disappointing readers."},
+            {component:5,number:44,question:"Which practice helps avoid misinformation?",options:["A. Share first, read later","B. Verify sources and check facts","C. Trust viral videos","D. Ignore dates"],answer:"B",rationale:"Fact-checking and using reliable sources reduce the spread of false information."},
+            {component:5,number:45,question:"What is 'digital divide'?",options:["A. Difference in digital skills and access","B. Split screen on phone","C. Two monitors","D. Online arguments"],answer:"A",rationale:"Digital divide refers to unequal access to technology, internet, and digital skills."},
+            {component:5,number:46,question:"Which is a good rule for online photos of children?",options:["A. Post freely","B. Avoid sharing identifiable locations or full names","C. Tag school","D. Share daily routines"],answer:"B",rationale:"Protect children's privacy by not oversharing personal details or locations."},
+            {component:5,number:47,question:"What does 'open source' mean for software?",options:["A. Free to use but not modify","B. Source code is publicly available for viewing and modification","C. Only for companies","D. Illegal to use"],answer:"B",rationale:"Open-source software allows users to view, modify, and distribute the source code."},
+            {component:5,number:48,question:"Which is a privacy risk of geotagging photos?",options:["A. Shows location history","B. Makes photos prettier","C. Increases likes","D. Faster upload"],answer:"A",rationale:"Geotags reveal exact locations, which can compromise safety and privacy."},
+            {component:5,number:49,question:"What should you do with suspicious friend requests?",options:["A. Accept immediately","B. Check profile and mutual friends before accepting","C. Message them first","D. Share your details"],answer:"B",rationale:"Verify unknown accounts to avoid fake profiles or scams."},
+            {component:5,number:50,question:"The ultimate goal of digital citizenship is:",options:["A. Spend more time online","B. Use technology safely, ethically, and responsibly","C. Break rules anonymously","D. Avoid all digital tools"],answer:"B",rationale:"Digital citizenship promotes safe, ethical, respectful, and responsible use of technology."},
+
+
+// Component 6: EDUCATIONAL TECHNOLOGY INTEGRATION (50 items)
+            {component:6,number:1,question:"The ADDIE model begins with:",options:["A. Development","B. Analysis","C. Implementation","D. Evaluation"],answer:"B",rationale:"ADDIE stands for Analysis, Design, Development, Implementation, and Evaluation. Analysis is the first step, identifying learner needs and objectives."},
+            {component:6,number:2,question:"The ASSURE model is primarily used to:",options:["A. Repair hardware","B. Integrate media and technology into instruction","C. Replace teachers","D. Evaluate software licenses"],answer:"B",rationale:"The ASSURE model helps teachers systematically plan and integrate instructional media and technology."},
+            {component:6,number:3,question:"In the SAMR model, Redefinition occurs when:",options:["A. Technology substitutes a worksheet","B. Students type notes instead of writing","C. Technology enables tasks previously inconceivable","D. Slides replace blackboard"],answer:"C",rationale:"Redefinition transforms learning tasks in ways not possible without technology."},
+            {component:6,number:4,question:"TPACK emphasizes the integration of:",options:["A. Technology only","B. Content only","C. Pedagogy only","D. Technology, Pedagogy, and Content Knowledge"],answer:"D",rationale:"TPACK highlights the intersection of technological, pedagogical, and content knowledge."},
+            {component:6,number:5,question:"Which evaluation model focuses on Reaction, Learning, Behavior, and Results?",options:["A. CIPP","B. Kirkpatrick Model","C. ADDIE","D. Bloom’s Taxonomy"],answer:"B",rationale:"The Kirkpatrick Model evaluates training effectiveness across four levels: Reaction, Learning, Behavior, and Results."},
+            {component:6,number:6,question:"The CIPP evaluation model stands for:",options:["A. Content, Integration, Process, Product","B. Context, Input, Process, Product","C. Curriculum, Instruction, Planning, Performance","D. Control, Implementation, Planning, Product"],answer:"B",rationale:"CIPP evaluates educational programs through Context, Input, Process, and Product."},
+            {component:6,number:7,question:"In instructional design, formative evaluation is conducted:",options:["A. After course completion only","B. During the development process","C. Before analysis","D. After final grading"],answer:"B",rationale:"Formative evaluation occurs during development to improve instructional materials."},
+            {component:6,number:8,question:"Which learning theory supports simulation-based digital learning?",options:["A. Behaviorism","B. Constructivism","C. Structuralism","D. Determinism"],answer:"B",rationale:"Constructivism emphasizes active learning and knowledge construction through experience, including simulations."},
+            {component:6,number:9,question:"A teacher redesigns a lesson using collaborative online global projects. This BEST reflects:",options:["A. Substitution","B. Augmentation","C. Redefinition","D. Traditional instruction"],answer:"C",rationale:"Global collaboration tasks are often impossible without technology, reflecting Redefinition."},
+            {component:6,number:10,question:"Backward design in instructional planning begins with:",options:["A. Selecting technology","B. Identifying desired learning outcomes","C. Designing activities","D. Preparing assessment tools"],answer:"B",rationale:"Backward design starts with identifying learning goals before planning instruction and assessment."},
+            {component:6,number:11,question:"The primary purpose of instructional alignment is to ensure:",options:["A. Technology replaces teaching","B. Objectives, activities, and assessments match","C. Students use gadgets daily","D. Lessons are longer"],answer:"B",rationale:"Alignment ensures coherence between goals, instruction, and evaluation."},
+            {component:6,number:12,question:"Which is an example of authentic assessment using technology?",options:["A. Multiple-choice quiz only","B. Online timed test","C. Student-created multimedia project solving real-world problem","D. Copy-paste assignment"],answer:"C",rationale:"Authentic assessments require real-world application and higher-order skills."},
+            {component:6,number:13,question:"In blended learning, technology:",options:["A. Completely replaces face-to-face instruction","B. Supplements and complements classroom learning","C. Eliminates assessment","D. Prevents collaboration"],answer:"B",rationale:"Blended learning integrates online tools with traditional classroom instruction to enhance flexibility and engagement, not replace teachers."},
+            {component:6,number:14,question:"Learning analytics in educational technology is primarily used to:",options:["A. Replace teacher judgment","B. Monitor and improve student performance","C. Increase internet bandwidth","D. Reduce course content"],answer:"B",rationale:"Learning analytics uses student data to identify patterns, monitor progress, and inform instructional decisions."},
+            {component:6,number:15,question:"The MOST important factor in selecting instructional technology is:",options:["A. Popularity of the tool","B. Cost of subscription","C. Alignment with learning objectives","D. Device brand"],answer:"C",rationale:"Technology must serve instructional goals. Alignment ensures meaningful integration and effective learning outcomes."},
+            {component:6,number:16,question:"A teacher uses virtual reality simulations to teach medical procedures. This reflects:",options:["A. Passive learning","B. Experiential and immersive learning","C. Minimal integration","D. Substitution level"],answer:"B",rationale:"VR simulations allow learners to experience realistic scenarios, promoting experiential and applied learning."},
+            {component:6,number:17,question:"The Evaluation phase in the ADDIE model focuses on:",options:["A. Identifying objectives","B. Installing devices","C. Measuring instructional effectiveness","D. Writing lesson plans"],answer:"C",rationale:"Evaluation determines whether learning objectives were achieved and whether improvements are needed."},
+            {component:6,number:18,question:"In a flipped classroom, in-class activities MOST likely focus on:",options:["A. Memorization","B. Passive listening","C. Application and analysis","D. Copying notes"],answer:"C",rationale:"Flipped classrooms shift content delivery outside class and use in-class time for higher-order thinking tasks."},
+            {component:6,number:19,question:"Which of the following is NOT a principle of Universal Design for Learning (UDL)?",options:["A. Multiple means of representation","B. Multiple means of engagement","C. Single rigid assessment format","D. Multiple means of expression"],answer:"C",rationale:"UDL promotes flexibility and accessibility, not rigid single-method assessment."},
+            {component:6,number:20,question:"In the ASSURE model, the letter “A” in the first step stands for:",options:["A. Analyze learners","B. Apply assessment","C. Align objectives","D. Activate devices"],answer:"A",rationale:"ASSURE begins with analyzing learner characteristics to tailor instruction effectively."},
+            {component:6,number:21,question:"Microlearning is characterized by:",options:["A. Extended lecture sessions","B. Short, focused instructional units","C. No assessment","D. Unlimited content delivery"],answer:"B",rationale:"Microlearning delivers content in short, targeted segments that enhance retention and flexibility."},
+            {component:6,number:22,question:"The MOST appropriate use of artificial intelligence in education is to:",options:["A. Replace teachers entirely","B. Personalize learning pathways","C. Eliminate assessments","D. Publicly share student data"],answer:"B",rationale:"AI can adapt content based on learner performance, supporting individualized instruction."},
+            {component:6,number:23,question:"Which design principle ensures accessibility in digital materials?",options:["A. Complex animations","B. Captioned videos and alternative text","C. Very small fonts","D. Overcrowded slides"],answer:"B",rationale:"Accessibility features like captions and alt text ensure inclusivity for diverse learners."},
+            {component:6,number:24,question:"Summative evaluation is conducted:",options:["A. Before planning","B. During development","C. After implementation","D. Before analysis"],answer:"C",rationale:"Summative evaluation measures overall effectiveness after the instructional program is completed."},
+            {component:6,number:25,question:"Instructional scaffolding in digital learning refers to:",options:["A. Removing guidance immediately","B. Gradually reducing support as competence increases","C. Avoiding feedback","D. Eliminating assessment"],answer:"B",rationale:"Scaffolding provides structured support that is gradually withdrawn as learners gain independence."},
+            {component:6,number:26,question:"Gamification primarily increases:",options:["A. Administrative tasks","B. Student engagement and motivation","C. Hardware requirements","D. Network traffic"],answer:"B",rationale:"Gamification uses game elements to increase participation and intrinsic motivation."},
+            {component:6,number:27,question:"A rubric in digital assessment is used to:",options:["A. Eliminate grading","B. Clarify evaluation criteria","C. Replace objectives","D. Increase difficulty"],answer:"B",rationale:"Rubrics provide transparent criteria that guide both assessment and student performance."},
+            {component:6,number:28,question:"Which tool BEST supports collaborative project-based learning?",options:["A. Local notepad","B. Shared cloud-based workspace","C. Offline calculator","D. BIOS interface"],answer:"B",rationale:"Cloud platforms enable real-time collaboration, communication, and shared editing."},
+            {component:6,number:29,question:"Instructional design should be learner-centered because:",options:["A. Technology demands it","B. Learners have diverse needs and abilities","C. It shortens lessons","D. It reduces teacher workload"],answer:"B",rationale:"Learner-centered design acknowledges varied learning styles, backgrounds, and competencies."},
+            {component:6,number:30,question:"Which evaluation focuses on final learning outcomes?",options:["A. Diagnostic","B. Formative","C. Informal","D. Summative"],answer:"D",rationale:"Summative evaluation measures final results and achievement after instruction."},
+            {component:6,number:31,question:"Digital storytelling enhances:",options:["A. Passive listening","B. Creativity and communication skills","C. Hardware installation","D. Memorization only"],answer:"B",rationale:"Digital storytelling combines multimedia and narrative skills, promoting creativity and communication."},
+            {component:6,number:32,question:"A needs assessment is conducted to:",options:["A. Identify available gadgets","B. Determine learning gaps and requirements","C. Increase enrollment","D. Replace teachers"],answer:"B",rationale:"Needs assessment identifies problems and guides instructional planning."},
+            {component:6,number:33,question:"Differentiated instruction using technology means:",options:["A. Providing identical tasks","B. Offering varied learning pathways","C. Eliminating objectives","D. Avoiding collaboration"],answer:"B",rationale:"Technology enables flexible instruction tailored to individual learner needs."},
+            {component:6,number:34,question:"The MOST appropriate metric for evaluating educational technology success is:",options:["A. Number of devices purchased","B. Student learning improvement","C. Internet speed","D. Teacher age"],answer:"B",rationale:"The true measure of success is improved student achievement and meaningful learning outcomes."},
+            {component:6,number:35,question:"Integrating podcasts into lessons primarily supports:",options:["A. Auditory learning preferences","B. Hardware training","C. Network troubleshooting","D. Software installation"],answer:"A",rationale:"Podcasts support auditory learners and flexible content access."},
+            {component:6,number:36,question:"Open Educational Resources (OER) promote:",options:["A. Limited content sharing","B. Equal and open access to knowledge","C. Copyright violation","D. Paid subscription access"],answer:"B",rationale:"OER provides freely accessible learning materials that promote equity."},
+            {component:6,number:37,question:"Effective instructional feedback should be:",options:["A. Delayed and vague","B. Constructive and timely","C. Publicly humiliating","D. Minimal"],answer:"B",rationale:"Timely and constructive feedback enhances learning and improvement."},
+            {component:6,number:38,question:"Behaviorism in educational technology emphasizes:",options:["A. Reinforcement and observable behavior","B. Pure memorization","C. Social media usage","D. Random exploration"],answer:"A",rationale:"Behaviorism focuses on stimulus-response and reinforcement principles."},
+            {component:6,number:39,question:"Technology-enhanced formative quizzes support:",options:["A. Immediate feedback","B. Delayed correction","C. Reduced learning","D. Elimination of reflection"],answer:"A",rationale:"Immediate feedback helps students correct misunderstandings promptly."},
+            {component:6,number:40,question:"A digital simulation enhances learning by:",options:["A. Removing objectives","B. Providing interactive practice","C. Reducing engagement","D. Avoiding assessment"],answer:"B",rationale:"Simulations allow experiential and applied learning."},
+            {component:6,number:41,question:"Cloud-based LMS platforms allow:",options:["A. Remote and flexible access","B. Offline-only access","C. Hardware replacement","D. Reduced monitoring"],answer:"A",rationale:"Cloud-based systems enable anytime, anywhere learning access."},
+            {component:6,number:42,question:"Minimalist slide design improves:",options:["A. Cognitive clarity and focus","B. Hardware speed","C. Internet strength","D. Screen brightness"],answer:"A",rationale:"Clean design reduces cognitive overload and enhances comprehension."},
+            {component:6,number:43,question:"Ethical integration of educational technology includes:",options:["A. Ignoring accessibility","B. Protecting student privacy","C. Sharing login credentials","D. Using pirated software"],answer:"B",rationale:"Protecting student data ensures ethical and legal compliance."},
+            {component:6,number:44,question:"Project-based digital learning develops:",options:["A. Surface memorization","B. Critical thinking and collaboration","C. Hardware skills only","D. Passive knowledge"],answer:"B",rationale:"Project-based learning fosters problem-solving and teamwork."},
+            {component:6,number:45,question:"The Design phase of ADDIE focuses on:",options:["A. Identifying objectives and instructional strategies","B. Delivering the lesson","C. Installing devices","D. Evaluating results"],answer:"A",rationale:"The Design phase specifies learning objectives, assessment methods, and instructional strategies."},
+            {component:6,number:46,question:"Instructional technology should:",options:["A. Replace teachers","B. Support pedagogy","C. Follow trends blindly","D. Increase screen time only"],answer:"B",rationale:"Technology must enhance teaching strategies and learning outcomes."},
+            {component:6,number:47,question:"Gathering student surveys after training reflects which level of Kirkpatrick?",options:["A. Reaction","B. Learning","C. Behavior","D. Results"],answer:"A",rationale:"The Reaction level measures participants’ satisfaction and response to the training."},
+            {component:6,number:48,question:"Adaptive learning systems are designed to:",options:["A. Offer identical tasks to all","B. Personalize learning pace and content","C. Remove teacher involvement","D. Avoid assessment"],answer:"B",rationale:"Adaptive systems adjust difficulty and content based on learner performance."},
+            {component:6,number:49,question:"The MOST effective integration of technology:",options:["A. Focuses on devices","B. Enhances learning outcomes","C. Increases screen exposure","D. Eliminates traditional teaching"],answer:"B",rationale:"Successful integration is measured by improved understanding and skill development."},
+            {component:6,number:50,question:"The ultimate goal of educational technology integration is to:",options:["A. Modernize classrooms only","B. Increase device usage","C. Improve meaningful and measurable learning experiences","D. Replace teachers permanently"],answer:"C",rationale:"Educational technology should create impactful, meaningful, and measurable improvements in learning."},
+
+            // ... (your full array continues here - I kept the structure exactly as you had it)
+            // Add the rest of your questions the same way
+            // For brevity I only showed first 10 of component 1, but paste all your questions in the same format
+        ];
+
+        // ==================== VARIABLES & FUNCTIONS ====================
+        let currentComponent = 1;
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let timerInterval = null;
+        let timeLeft = 5400;
+
+        function selectComponent(comp) {
+            document.querySelectorAll('.component-btn').forEach(b => b.classList.remove('active-component','bg-violet-100','dark:bg-violet-900/20'));
+            document.getElementById(`comp-${comp}`).classList.add('active-component','bg-violet-100','dark:bg-violet-900/20');
+            currentComponent = comp;
+            document.getElementById('component-title').textContent = `Component ${comp}: ` + (comp===1?"Computer Fundamentals":comp===2?"ICT in Education":comp===3?"Networking":comp===4?"Programming Basics":comp===5?"Digital Literacy & Cyber Ethics":"Educational Technology Integration");
+            currentQuestions = allQuestions.filter(q => q.component === comp);
+            showHome();
+            if (window.innerWidth < 768) toggleMobileMenu();
+        }
+
+        function showHome() {
+            document.getElementById('home-screen').classList.remove('hidden');
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('full-review-screen').classList.add('hidden');
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(currentQuestions.length).fill(null);
+            timeLeft = 5400;
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            startTimer();
+            loadQuestion();
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const m = Math.floor(timeLeft/60);
+                const s = timeLeft % 60;
+                document.getElementById('timer').textContent = `${m}:${s<10?'0':''}${s}`;
+                if (timeLeft <= 0) submitQuiz();
+            }, 1000);
+        }
+
+        function loadQuestion() {
+            const q = currentQuestions[currentQuestionIndex];
+            document.getElementById('current-q-num').textContent = currentQuestionIndex + 1;
+            document.getElementById('question-text').innerHTML = q.question;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            // FIXED: map array index → letter A,B,C,D and store the LETTER
+            q.options.forEach((optionText, index) => {
+                const letter = String.fromCharCode(65 + index);  // 0 → A, 1 → B, 2 → C, 3 → D
+
+                const div = document.createElement('div');
+                div.className = `option flex items-center gap-4 p-5 border-2 rounded-2xl cursor-pointer text-lg ${
+                    userAnswers[currentQuestionIndex] === letter 
+                        ? 'border-violet-600 bg-violet-50 dark:bg-violet-950' 
+                        : 'border-transparent hover:border-zinc-300 dark:hover:border-zinc-600'
+                }`;
+
+                div.innerHTML = `
+                    <div class="w-8 h-8 flex-shrink-0 border-2 border-zinc-400 dark:border-zinc-600 rounded-xl flex items-center justify-center text-lg font-semibold">
+                        ${letter}
+                    </div>
+                    <div>${optionText}</div>
+                `;
+
+                div.onclick = () => {
+                    userAnswers[currentQuestionIndex] = letter;   // ← now stores "A","B","C","D"
+                    loadQuestion();  // refresh UI to show selection
+                };
+
+                container.appendChild(div);
+            });
+
+            document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
+            document.getElementById('next-text').textContent = currentQuestionIndex === currentQuestions.length - 1 ? 'Submit' : 'Next';
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuestions.length-1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else submitQuiz();
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            clearInterval(timerInterval);
+            let score = 0;
+            const reviewHTML = [];
+            currentQuestions.forEach((q,i) => {
+                const correct = userAnswers[i] === q.answer;  // now both are letters → works
+                if (correct) score++;
+
+                // Improved review display: show correct in green, wrong choice crossed out
+                const optionsDisplay = q.options.map((opt, idx) => {
+                    const letter = String.fromCharCode(65 + idx);
+                    let className = '';
+                    if (letter === q.answer) className = 'text-emerald-600 font-medium';
+                    if (letter === userAnswers[i] && letter !== q.answer) className = 'text-rose-600 line-through';
+                    return `<div class="${className}">${letter}. ${opt}</div>`;
+                }).join('');
+
+                reviewHTML.push(`
+                    <div class="flex gap-6 border-l-4 ${correct?'border-emerald-500':'border-rose-500'} pl-6 py-2">
+                        <div class="flex-1">
+                            <p class="font-medium">${q.question}</p>
+                            <div class="mt-3 text-sm">${optionsDisplay}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs ${correct?'text-emerald-500':'text-rose-500'}">${correct?'CORRECT':'INCORRECT'}</div>
+                            <button onclick="alert('Rationalization:\\n\\n${q.rationale.replace(/"/g,'\\"')}')" class="text-xs underline mt-2">Show rationale</button>
+                        </div>
+                    </div>
+                `);
+            });
+
+            const perc = Math.round(score / currentQuestions.length * 100);
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.remove('hidden');
+            document.getElementById('score-circle').innerHTML = `${perc}<span class="text-2xl">%</span>`;
+            document.getElementById('score-circle').className = `mx-auto w-48 h-48 rounded-full border-8 flex items-center justify-center text-7xl font-bold mb-6 ${perc>=80?'border-emerald-500 text-emerald-600':perc>=60?'border-amber-500 text-amber-600':'border-rose-500 text-rose-600'}`;
+            document.getElementById('results-title').textContent = perc>=80?'Outstanding!':perc>=60?'Good job!':'Keep practicing!';
+            document.getElementById('results-subtitle').innerHTML = `Component ${currentComponent} • ${score}/${currentQuestions.length} correct`;
+            document.getElementById('review-list').innerHTML = reviewHTML.join('');
+        }
+
+        // ────────────────────────────────────────────────
+        // The rest of your functions remain unchanged
+        // ────────────────────────────────────────────────
+
+        function startReviewMode() {
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('full-review-screen').classList.remove('hidden');
+            renderFullReview();
+        }
+
+        function renderFullReview(filtered=null) {
+            const container = document.getElementById('full-review-list');
+            container.innerHTML = '';
+            (filtered || allQuestions).forEach(q => {
+                const div = document.createElement('div');
+                div.className = 'bg-white dark:bg-zinc-900 rounded-3xl p-8';
+                div.innerHTML = `<div class="font-mono text-sm mb-2">Comp ${q.component} • Q${q.number}</div><p class="font-medium">${q.question}</p><div class="mt-6 grid grid-cols-2 gap-3 text-sm">${q.options.map((opt,idx)=>{const l=String.fromCharCode(65+idx);return `<div class="${l===q.answer?'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 p-3 rounded-2xl font-medium':''}">${l}. ${opt}</div>`}).join('')}</div><div class="mt-6 text-xs text-violet-600">Rationalization: <span class="text-zinc-600 dark:text-zinc-400">${q.rationale}</span></div>`;
+                container.appendChild(div);
+            });
+        }
+
+        function filterReview() {
+            const term = document.getElementById('search-input').value.toLowerCase();
+            const filtered = allQuestions.filter(q => q.question.toLowerCase().includes(term) || q.rationale.toLowerCase().includes(term));
+            renderFullReview(filtered);
+        }
+
+        function saveScoreToDB() {
+            const score = Math.round(currentQuestions.filter((q,i)=>userAnswers[i]===q.answer).length / currentQuestions.length * 100);
+            const history = JSON.parse(localStorage.getItem('letIctHistory')||'[]');
+            history.unshift({date:new Date().toLocaleDateString('en-PH'),component:currentComponent,score:score,correct:currentQuestions.filter((q,i)=>userAnswers[i]===q.answer).length,total:currentQuestions.length});
+            localStorage.setItem('letIctHistory', JSON.stringify(history.slice(0,20)));
+            alert(`✅ Saved! Component ${currentComponent}: ${score}%`);
+        }
+
+        function showHistory() {
+            const history = JSON.parse(localStorage.getItem('letIctHistory')||'[]');
+            const container = document.getElementById('history-list');
+            container.innerHTML = history.length ? history.map(h=>`<div class="flex justify-between p-5 bg-zinc-50 dark:bg-zinc-800 rounded-2xl"><div><div class="font-medium">Component ${h.component}</div><div class="text-xs text-zinc-500">${h.date}</div></div><div class="text-right"><div class="text-3xl font-bold text-emerald-500">${h.score}%</div><div class="text-xs">${h.correct}/${h.total}</div></div></div>`).join('') : `<p class="text-center py-12 text-zinc-400">No scores yet</p>`;
+            document.getElementById('history-modal').classList.remove('hidden');
+        }
+
+        function hideHistory() { document.getElementById('history-modal').classList.add('hidden'); }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            document.getElementById('theme-text').textContent = document.documentElement.classList.contains('dark') ? 'Light Mode' : 'Dark Mode';
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('mobile-overlay').classList.toggle('hidden');
+        }
+
+        function endQuizEarly() { if(confirm('End quiz?')) submitQuiz(); }
+        function restartSameComponent() { startQuiz(); }
+        function backToHome() { showHome(); }
+
+        window.onload = () => {
+            if (localStorage.getItem('darkMode')==='true' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-text').textContent = 'Light Mode';
+            }
+            selectComponent(1);
+            console.log('%c✅ Reviewer loaded - correct/incorrect should now work properly', 'color:#a855f7;font-weight:bold');
+        };
+    </script>
+</body>
+</html>
