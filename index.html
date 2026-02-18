@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTLED–ICT Mock LET Reviewer • 300 Questions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .question-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar { transition: transform 0.3s ease; }
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+        }
+        .option { transition: all 0.2s; }
+    </style>
+</head>
+<body class="bg-zinc-100 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 min-h-screen">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- Mobile Top Bar -->
+        <div class="md:hidden fixed top-0 left-0 right-0 h-16 bg-white dark:bg-zinc-900 border-b z-50 flex items-center px-4 justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-violet-600 text-white rounded-2xl flex items-center justify-center text-2xl font-bold">L</div>
+                <h1 class="font-bold text-lg">ICT LET Reviewer</h1>
+            </div>
+            <button onclick="toggleMobileMenu()" class="text-3xl w-12 h-12 flex items-center justify-center">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar md:w-72 bg-white dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 flex flex-col fixed md:static inset-y-0 left-0 z-50 w-72 md:translate-x-0">
+            <div class="md:p-6 p-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center gap-3">
+                <div class="w-10 h-10 bg-violet-600 text-white rounded-2xl flex items-center justify-center text-2xl font-bold">L</div>
+                <div class="hidden md:block">
+                    <h1 class="text-2xl font-bold tracking-tight">ICT LET Reviewer</h1>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400">300 Questions • 6 Components</p>
+                </div>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-4 pt-20 md:pt-4">
+                <div class="space-y-1">
+                    <button onclick="selectComponent(1)" class="component-btn w-full text-left px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors active-component" id="comp-1">
+                        <span class="text-lg font-semibold text-violet-600">01</span><span class="font-medium">Computer Fundamentals</span>
+                    </button>
+                    <button onclick="selectComponent(2)" class="component-btn w-full text-left px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" id="comp-2">
+                        <span class="text-lg font-semibold text-violet-600">02</span><span class="font-medium">ICT in Education</span>
+                    </button>
+                    <button onclick="selectComponent(3)" class="component-btn w-full text-left px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" id="comp-3">
+                        <span class="text-lg font-semibold text-violet-600">03</span><span class="font-medium">Networking</span>
+                    </button>
+                    <button onclick="selectComponent(4)" class="component-btn w-full text-left px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" id="comp-4">
+                        <span class="text-lg font-semibold text-violet-600">04</span><span class="font-medium">Programming Basics</span>
+                    </button>
+                    <button onclick="selectComponent(5)" class="component-btn w-full text-left px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" id="comp-5">
+                        <span class="text-lg font-semibold text-violet-600">05</span><span class="font-medium">Digital Literacy & Cyber Ethics</span>
+                    </button>
+                    <button onclick="selectComponent(6)" class="component-btn w-full text-left px-4 py-3 rounded-2xl flex items-center gap-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" id="comp-6">
+                        <span class="text-lg font-semibold text-violet-600">06</span><span class="font-medium">Educational Technology Integration</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-4 border-t border-zinc-200 dark:border-zinc-800">
+                <div onclick="showHistory()" class="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer">
+                    <i class="fa-solid fa-clock-rotate-left text-xl text-amber-500"></i>
+                    <div><p class="font-medium text-sm">Score History</p></div>
+                </div>
+                <button onclick="toggleDarkMode()" class="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl hover:bg-zinc-100 dark:hover:bg-zinc-800 text-sm font-medium">
+                    <i class="fa-solid fa-moon"></i><span id="theme-text">Dark Mode</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Top Bar -->
+            <div class="h-16 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 px-8 hidden md:flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <h2 id="component-title" class="text-2xl font-semibold">Component 1: Computer Fundamentals</h2>
+                    <span id="component-subtitle" class="text-sm px-3 py-1 bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 rounded-full">50 Questions</span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <button onclick="startReviewMode()" class="flex items-center gap-2 text-sm font-medium hover:text-violet-600 transition-colors">
+                        <i class="fa-solid fa-book-open"></i><span>Full Review</span>
+                    </button>
+                    <button onclick="startQuiz()" class="bg-violet-600 hover:bg-violet-700 text-white px-6 py-2.5 rounded-2xl font-semibold flex items-center gap-2 transition-all active:scale-95">
+                        <i class="fa-solid fa-play"></i><span>Start Quiz</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="flex-1 overflow-auto p-8 pt-20 md:pt-8" id="main-content">
+
+                <!-- Home Screen -->
+                <div id="home-screen" class="max-w-2xl mx-auto text-center py-20">
+                    <div class="mb-8">
+                        <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white rounded-3xl text-6xl mb-6">📘</div>
+                    </div>
+                    <h1 class="text-5xl font-bold tracking-tighter mb-4">Welcome to your<br>ICT LET Mock Exam</h1>
+                    <p class="text-xl text-zinc-600 dark:text-zinc-400 mb-12">300 high-quality questions with detailed rationalizations.<br>Perfect preparation for the LET.</p>
+                </div>
+
+                <!-- Quiz Screen -->
+                <div id="quiz-screen" class="hidden max-w-3xl mx-auto">
+                    <div class="flex justify-between items-center mb-8">
+                        <div class="text-sm text-zinc-500">Question <span id="current-q-num" class="font-mono font-bold text-2xl text-violet-600">1</span>/50</div>
+                        <div class="flex items-center gap-4">
+                            <div id="timer" class="font-mono text-lg font-semibold text-rose-500">90:00</div>
+                            <button onclick="endQuizEarly()" class="text-xs px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-2xl hover:bg-red-50 dark:hover:bg-red-950">End Quiz</button>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-zinc-900 rounded-3xl p-10 shadow-xl question-card" id="question-card">
+                        <p id="question-text" class="text-xl leading-relaxed font-medium mb-10"></p>
+                        <div id="options-container" class="space-y-3"></div>
+                    </div>
+                    <div class="flex justify-between mt-8">
+                        <button onclick="prevQuestion()" id="prev-btn" class="flex items-center gap-2 px-6 py-3 rounded-2xl border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 disabled:opacity-50">
+                            <i class="fa-solid fa-arrow-left"></i><span>Previous</span>
+                        </button>
+                        <button onclick="nextQuestion()" id="next-btn" class="flex items-center gap-2 px-8 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-2xl font-semibold">
+                            <span id="next-text">Next</span><i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Screen -->
+                <div id="results-screen" class="hidden max-w-4xl mx-auto">
+                    <div class="text-center mb-10">
+                        <div id="score-circle" class="mx-auto w-48 h-48 rounded-full border-8 border-emerald-500 flex items-center justify-center text-7xl font-bold mb-6">92</div>
+                        <h2 id="results-title" class="text-4xl font-bold">Excellent!</h2>
+                        <p id="results-subtitle" class="text-zinc-500 dark:text-zinc-400">Component 1 • 46/50 correct</p>
+                    </div>
+                    <div class="bg-white dark:bg-zinc-900 rounded-3xl p-8">
+                        <h3 class="font-semibold mb-6 flex items-center gap-2"><i class="fa-solid fa-list-check"></i> Detailed Review</h3>
+                        <div id="review-list" class="space-y-6 max-h-[500px] overflow-auto pr-4"></div>
+                    </div>
+                    <div class="flex gap-4 justify-center mt-10 flex-wrap">
+                        <button onclick="saveScoreToDB()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-3xl font-semibold flex items-center gap-3">
+                            <i class="fa-solid fa-floppy-disk"></i> Save to My Database
+                        </button>
+                        <button onclick="restartSameComponent()" class="px-8 py-4 rounded-3xl border border-zinc-300 dark:border-zinc-700 font-medium">Retake Component</button>
+                        <button onclick="backToHome()" class="px-8 py-4 rounded-3xl border border-zinc-300 dark:border-zinc-700 font-medium">Back to Menu</button>
+                    </div>
+                </div>
+
+                <!-- Full Review Mode -->
+                <div id="full-review-screen" class="hidden max-w-4xl mx-auto">
+                    <div class="flex items-center justify-between mb-8">
+                        <h2 class="text-3xl font-semibold">All Questions & Rationalizations</h2>
+                        <input id="search-input" onkeyup="filterReview()" placeholder="Search questions..." class="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-3xl px-6 py-3 w-80 focus:outline-none focus:border-violet-500">
+                    </div>
+                    <div id="full-review-list" class="space-y-8"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Overlay -->
+    <div onclick="toggleMobileMenu()" id="mobile-overlay" class="hidden md:hidden fixed inset-0 bg-black/50 z-40"></div>
+
+    <!-- History Modal -->
+    <div id="history-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-zinc-900 rounded-3xl max-w-lg w-full mx-4 max-h-[90vh] overflow-hidden">
+            <div class="p-6 border-b dark:border-zinc-700 flex items-center justify-between">
+                <h3 class="font-semibold text-lg">Your Score History</h3>
+                <button onclick="hideHistory()" class="text-2xl leading-none">&times;</button>
+            </div>
+            <div id="history-list" class="p-6 max-h-[60vh] overflow-auto space-y-4"></div>
+            <div class="p-6 border-t dark:border-zinc-700 flex justify-end">
+                <button onclick="hideHistory()" class="px-6 py-3 font-medium">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== ALL 300 QUESTIONS ====================
+        const allQuestions = [
+            // Component 1 - Computer Fundamentals (1-50)
+            {component:1,number:1,question:"Which component is primarily responsible for executing program instructions?",options:["A. RAM","B. Hard Drive","C. CPU","D. Motherboard"],answer:"C",rationale:"The CPU (Central Processing Unit) executes program instructions through its control unit and arithmetic logic unit. RAM stores data temporarily, while storage devices keep data permanently."},
+            {component:1,number:2,question:"Which of the following is a volatile memory?",options:["A. SSD","B. ROM","C. RAM","D. Flash Drive"],answer:"C",rationale:"RAM is volatile memory because it loses its contents when power is turned off. ROM and storage devices retain data even without power."},
+            {component:1,number:3,question:"The primary function of the operating system is to:",options:["A. Design applications","B. Manage hardware and software resources","C. Replace antivirus software","D. Increase internet speed"],answer:"B",rationale:"The operating system manages hardware resources, processes, memory, and user interfaces. It acts as an intermediary between hardware and application software."},
+            {component:1,number:4,question:"Which of the following is an example of system software?",options:["A. Microsoft Word","B. Google Chrome","C. Linux","D. Adobe Photoshop"],answer:"C",rationale:"Linux is an operating system, which is classified as system software. The others are application software."},
+            {component:1,number:5,question:"Which device converts digital signals to analog signals for transmission over telephone lines?",options:["A. Router","B. Switch","C. Modem","D. Repeater"],answer:"C",rationale:"A modem (modulator-demodulator) converts digital signals into analog signals and vice versa for communication over traditional telephone lines."},
+            {component:1,number:6,question:"The binary number system uses which base?",options:["A. 2","B. 8","C. 10","D. 16"],answer:"A",rationale:"Binary is a base-2 number system that uses only two digits: 0 and 1. Computers operate internally using binary."},
+            {component:1,number:7,question:"Which storage device has no moving mechanical parts?",options:["A. HDD","B. SSD","C. CD-ROM","D. DVD"],answer:"B",rationale:"Solid State Drives (SSD) use flash memory and contain no moving parts, making them faster and more durable than HDDs."},
+            {component:1,number:8,question:"The ALU is responsible for:",options:["A. Storing files","B. Performing arithmetic and logic operations","C. Connecting peripherals","D. Booting the system"],answer:"B",rationale:"The Arithmetic Logic Unit performs mathematical calculations and logical comparisons within the CPU."},
+            {component:1,number:9,question:"Which of the following is an input device?",options:["A. Printer","B. Monitor","C. Scanner","D. Speaker"],answer:"C",rationale:"A scanner captures physical documents and converts them into digital form, making it an input device."},
+            {component:1,number:10,question:"A terabyte is equal to approximately:",options:["A. 1,000 bytes","B. 1 million bytes","C. 1 billion bytes","D. 1 trillion bytes"],answer:"D",rationale:"A terabyte is approximately one trillion bytes (1,000 gigabytes in decimal measurement)."},
+            // ... (your full array continues here - I kept the structure exactly as you had it)
+            // Add the rest of your questions the same way
+            // For brevity I only showed first 10 of component 1, but paste all your questions in the same format
+        ];
+
+        // ==================== VARIABLES & FUNCTIONS ====================
+        let currentComponent = 1;
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let timerInterval = null;
+        let timeLeft = 5400;
+
+        function selectComponent(comp) {
+            document.querySelectorAll('.component-btn').forEach(b => b.classList.remove('active-component','bg-violet-100','dark:bg-violet-900/20'));
+            document.getElementById(`comp-${comp}`).classList.add('active-component','bg-violet-100','dark:bg-violet-900/20');
+            currentComponent = comp;
+            document.getElementById('component-title').textContent = `Component ${comp}: ` + (comp===1?"Computer Fundamentals":comp===2?"ICT in Education":comp===3?"Networking":comp===4?"Programming Basics":comp===5?"Digital Literacy & Cyber Ethics":"Educational Technology Integration");
+            currentQuestions = allQuestions.filter(q => q.component === comp);
+            showHome();
+            if (window.innerWidth < 768) toggleMobileMenu();
+        }
+
+        function showHome() {
+            document.getElementById('home-screen').classList.remove('hidden');
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('full-review-screen').classList.add('hidden');
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(currentQuestions.length).fill(null);
+            timeLeft = 5400;
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            startTimer();
+            loadQuestion();
+        }
+
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const m = Math.floor(timeLeft/60);
+                const s = timeLeft % 60;
+                document.getElementById('timer').textContent = `${m}:${s<10?'0':''}${s}`;
+                if (timeLeft <= 0) submitQuiz();
+            }, 1000);
+        }
+
+        function loadQuestion() {
+            const q = currentQuestions[currentQuestionIndex];
+            document.getElementById('current-q-num').textContent = currentQuestionIndex + 1;
+            document.getElementById('question-text').innerHTML = q.question;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            // FIXED: map array index → letter A,B,C,D and store the LETTER
+            q.options.forEach((optionText, index) => {
+                const letter = String.fromCharCode(65 + index);  // 0 → A, 1 → B, 2 → C, 3 → D
+
+                const div = document.createElement('div');
+                div.className = `option flex items-center gap-4 p-5 border-2 rounded-2xl cursor-pointer text-lg ${
+                    userAnswers[currentQuestionIndex] === letter 
+                        ? 'border-violet-600 bg-violet-50 dark:bg-violet-950' 
+                        : 'border-transparent hover:border-zinc-300 dark:hover:border-zinc-600'
+                }`;
+
+                div.innerHTML = `
+                    <div class="w-8 h-8 flex-shrink-0 border-2 border-zinc-400 dark:border-zinc-600 rounded-xl flex items-center justify-center text-lg font-semibold">
+                        ${letter}
+                    </div>
+                    <div>${optionText}</div>
+                `;
+
+                div.onclick = () => {
+                    userAnswers[currentQuestionIndex] = letter;   // ← now stores "A","B","C","D"
+                    loadQuestion();  // refresh UI to show selection
+                };
+
+                container.appendChild(div);
+            });
+
+            document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
+            document.getElementById('next-text').textContent = currentQuestionIndex === currentQuestions.length - 1 ? 'Submit' : 'Next';
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuestions.length-1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else submitQuiz();
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            clearInterval(timerInterval);
+            let score = 0;
+            const reviewHTML = [];
+            currentQuestions.forEach((q,i) => {
+                const correct = userAnswers[i] === q.answer;  // now both are letters → works
+                if (correct) score++;
+
+                // Improved review display: show correct in green, wrong choice crossed out
+                const optionsDisplay = q.options.map((opt, idx) => {
+                    const letter = String.fromCharCode(65 + idx);
+                    let className = '';
+                    if (letter === q.answer) className = 'text-emerald-600 font-medium';
+                    if (letter === userAnswers[i] && letter !== q.answer) className = 'text-rose-600 line-through';
+                    return `<div class="${className}">${letter}. ${opt}</div>`;
+                }).join('');
+
+                reviewHTML.push(`
+                    <div class="flex gap-6 border-l-4 ${correct?'border-emerald-500':'border-rose-500'} pl-6 py-2">
+                        <div class="flex-1">
+                            <p class="font-medium">${q.question}</p>
+                            <div class="mt-3 text-sm">${optionsDisplay}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs ${correct?'text-emerald-500':'text-rose-500'}">${correct?'CORRECT':'INCORRECT'}</div>
+                            <button onclick="alert('Rationalization:\\n\\n${q.rationale.replace(/"/g,'\\"')}')" class="text-xs underline mt-2">Show rationale</button>
+                        </div>
+                    </div>
+                `);
+            });
+
+            const perc = Math.round(score / currentQuestions.length * 100);
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.remove('hidden');
+            document.getElementById('score-circle').innerHTML = `${perc}<span class="text-2xl">%</span>`;
+            document.getElementById('score-circle').className = `mx-auto w-48 h-48 rounded-full border-8 flex items-center justify-center text-7xl font-bold mb-6 ${perc>=80?'border-emerald-500 text-emerald-600':perc>=60?'border-amber-500 text-amber-600':'border-rose-500 text-rose-600'}`;
+            document.getElementById('results-title').textContent = perc>=80?'Outstanding!':perc>=60?'Good job!':'Keep practicing!';
+            document.getElementById('results-subtitle').innerHTML = `Component ${currentComponent} • ${score}/${currentQuestions.length} correct`;
+            document.getElementById('review-list').innerHTML = reviewHTML.join('');
+        }
+
+        // ────────────────────────────────────────────────
+        // The rest of your functions remain unchanged
+        // ────────────────────────────────────────────────
+
+        function startReviewMode() {
+            document.getElementById('home-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('full-review-screen').classList.remove('hidden');
+            renderFullReview();
+        }
+
+        function renderFullReview(filtered=null) {
+            const container = document.getElementById('full-review-list');
+            container.innerHTML = '';
+            (filtered || allQuestions).forEach(q => {
+                const div = document.createElement('div');
+                div.className = 'bg-white dark:bg-zinc-900 rounded-3xl p-8';
+                div.innerHTML = `<div class="font-mono text-sm mb-2">Comp ${q.component} • Q${q.number}</div><p class="font-medium">${q.question}</p><div class="mt-6 grid grid-cols-2 gap-3 text-sm">${q.options.map((opt,idx)=>{const l=String.fromCharCode(65+idx);return `<div class="${l===q.answer?'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 p-3 rounded-2xl font-medium':''}">${l}. ${opt}</div>`}).join('')}</div><div class="mt-6 text-xs text-violet-600">Rationalization: <span class="text-zinc-600 dark:text-zinc-400">${q.rationale}</span></div>`;
+                container.appendChild(div);
+            });
+        }
+
+        function filterReview() {
+            const term = document.getElementById('search-input').value.toLowerCase();
+            const filtered = allQuestions.filter(q => q.question.toLowerCase().includes(term) || q.rationale.toLowerCase().includes(term));
+            renderFullReview(filtered);
+        }
+
+        function saveScoreToDB() {
+            const score = Math.round(currentQuestions.filter((q,i)=>userAnswers[i]===q.answer).length / currentQuestions.length * 100);
+            const history = JSON.parse(localStorage.getItem('letIctHistory')||'[]');
+            history.unshift({date:new Date().toLocaleDateString('en-PH'),component:currentComponent,score:score,correct:currentQuestions.filter((q,i)=>userAnswers[i]===q.answer).length,total:currentQuestions.length});
+            localStorage.setItem('letIctHistory', JSON.stringify(history.slice(0,20)));
+            alert(`✅ Saved! Component ${currentComponent}: ${score}%`);
+        }
+
+        function showHistory() {
+            const history = JSON.parse(localStorage.getItem('letIctHistory')||'[]');
+            const container = document.getElementById('history-list');
+            container.innerHTML = history.length ? history.map(h=>`<div class="flex justify-between p-5 bg-zinc-50 dark:bg-zinc-800 rounded-2xl"><div><div class="font-medium">Component ${h.component}</div><div class="text-xs text-zinc-500">${h.date}</div></div><div class="text-right"><div class="text-3xl font-bold text-emerald-500">${h.score}%</div><div class="text-xs">${h.correct}/${h.total}</div></div></div>`).join('') : `<p class="text-center py-12 text-zinc-400">No scores yet</p>`;
+            document.getElementById('history-modal').classList.remove('hidden');
+        }
+
+        function hideHistory() { document.getElementById('history-modal').classList.add('hidden'); }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            document.getElementById('theme-text').textContent = document.documentElement.classList.contains('dark') ? 'Light Mode' : 'Dark Mode';
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('mobile-overlay').classList.toggle('hidden');
+        }
+
+        function endQuizEarly() { if(confirm('End quiz?')) submitQuiz(); }
+        function restartSameComponent() { startQuiz(); }
+        function backToHome() { showHome(); }
+
+        window.onload = () => {
+            if (localStorage.getItem('darkMode')==='true' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-text').textContent = 'Light Mode';
+            }
+            selectComponent(1);
+            console.log('%c✅ Reviewer loaded - correct/incorrect should now work properly', 'color:#a855f7;font-weight:bold');
+        };
+    </script>
+</body>
+</html>
